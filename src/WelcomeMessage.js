@@ -6,7 +6,7 @@ class WelcomeMessage extends Component {
       return props.firstName + ' ' + props.lastName;
     }
     return (
-      <h2>Welcome to Stoic Reminders, brought to you by {fullName(this.props)}</h2>
+      <h2>Welcome to Crypto News, brought to you by {fullName(this.props)}</h2>
     )
   }
 }
