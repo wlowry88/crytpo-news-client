@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import WelcomeMessage from './WelcomeMessage.js'
 import './App.css';
 
 const list = [
@@ -19,15 +20,32 @@ const list = [
     objectID: 1,
 }, ];
 
+const randomNumber = parseInt(10000 * Math.random(), 10);
+
+const isSearched = (searchTerm) => (item) =>
+  !searchTerm || item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
 class App extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       list: list,
+      searchTerm: '',
       colors: {'odd': 'red', 'even': 'green'}
     };
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this);
+  }
+
+  onSearchChange(event) {
+    this.setState({ searchTerm: event.target.value });
+  }
+
+  onDismiss(id) {
+    const updatedList = this.state.list.filter(item => item.objectID !== id);
+    this.setState({ list: updatedList });
   }
 
   color(number) {
@@ -35,22 +53,43 @@ class App extends Component {
   }
 
   render() {
-    const randomNumber = parseInt(10000 * Math.random(), 10);
     return (
       <div className="App">
         <div className="App-header">
-          { this.state.list.map(item =>
-              <div key={item.objectID} style={{color: this.color(item.objectID)}}>
-                <span>
-                  <a href={item.url}>{item.title}</a>
-                </span>
-                <span>{item.author}</span>
-                <span>{item.num_comments}</span>
-                <span>{item.points}</span>
-              </div>
-            )
-          }
+          <img src={logo} className="App-logo" alt="logo" />
+          <WelcomeMessage firstName = "Will" lastName = 'Lowry' />
         </div>
+        <p className="App-intro">
+          This site will send texts to phone numbers to start.
+        </p>        
+        <p className="App-intro">
+          {randomNumber} requests sent!
+        </p>
+        <form>
+          <input
+            type="text"
+            onChange={this.onSearchChange}
+          />
+        </form>
+        { this.state.list.filter(isSearched(this.state.searchTerm))
+          .map(item =>
+            <div key={item.objectID} style={{color: this.color(item.objectID)}}>
+              <span>
+                <a href={item.url}>{item.title}</a>
+              </span>
+              <span>{item.author}</span>
+              <span>{item.num_comments}</span>
+              <span>{item.points}</span>
+              <span>
+                <button
+                  onClick={() => this.onDismiss(item.objectID)}
+                  type="button"
+  > Dismiss
+                </button>
+              </span>
+            </div>
+          )
+        }
       </div>
     );
   }
