@@ -21,13 +21,26 @@ const list = [
 
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: list,
+      colors: {'odd': 'red', 'even': 'green'}
+    };
+  }
+
+  color(number) {
+    return number % 2 === 0 ? 'red' : 'green';
+  }
+
   render() {
     const randomNumber = parseInt(10000 * Math.random(), 10);
     return (
       <div className="App">
         <div className="App-header">
-          { list.map(item =>
-              <div key={item.objectID}>
+          { this.state.list.map(item =>
+              <div key={item.objectID} style={{color: this.color(item.objectID)}}>
                 <span>
                   <a href={item.url}>{item.title}</a>
                 </span>
