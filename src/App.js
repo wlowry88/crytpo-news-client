@@ -25,6 +25,9 @@ const randomNumber = parseInt(10000 * Math.random(), 10);
 const isSearched = (searchTerm) => (item) =>
   !searchTerm || item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
+const color = number =>
+  number % 2 === 0 ? 'red' : 'green';
+
 class App extends Component {
 
   constructor(props) {
@@ -48,10 +51,6 @@ class App extends Component {
     this.setState({ list: updatedList });
   }
 
-  color(number) {
-    return number % 2 === 0 ? 'red' : 'green';
-  }
-
   render() {
     const { searchTerm, list } = this.state;
     return (
@@ -66,15 +65,43 @@ class App extends Component {
         <p className="App-intro">
           {randomNumber} requests sent!
         </p>
-        <form>
-          <input
-            type="text"
-            onChange={this.onSearchChange}
-          />
-        </form>
-        { list.filter(isSearched(searchTerm))
+        <Search 
+          value={searchTerm}
+          onChange={this.onSearchChange}
+        />
+        <Table 
+          list={list}
+          pattern={searchTerm}
+          onDismiss={this.onDismiss}
+        />
+      </div>
+    );
+  }
+}
+
+class Search extends Component {
+  render () {
+    const { value, onChange } = this.props;
+    return (
+      <form>
+        <input
+          type="text"
+          value={value}
+          onChange={onChange}
+        />
+      </form>
+    );
+  }
+}
+
+class Table extends Component {
+  render () {
+    const { list, pattern, onDismiss} = this.props;
+    return (
+      <div>
+        { list.filter(isSearched(pattern))
           .map(item =>
-            <div key={item.objectID} style={{color: this.color(item.objectID)}}>
+            <div key={item.objectID} style={{color: color(item.objectID)}}>
               <span>
                 <a href={item.url}>{item.title}</a>
               </span>
@@ -83,7 +110,7 @@ class App extends Component {
               <span>{item.points}</span>
               <span>
                 <button
-                  onClick={() => this.onDismiss(item.objectID)}
+                  onClick={() => onDismiss(item.objectID)}
                   type="button"
   > Dismiss
                 </button>
@@ -92,7 +119,7 @@ class App extends Component {
           )
         }
       </div>
-    );
+    )
   }
 }
 
