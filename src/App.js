@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import WelcomeMessage from './WelcomeMessage.js'
 import './App.css';
+import PropTypes from 'prop-types';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_PAGE = 0;
@@ -12,14 +11,6 @@ const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 const PARAM_HPP = 'hitsPerPage=';
-
-const randomNumber = parseInt(10000 * Math.random(), 10);
-
-const isSearched = (searchTerm) => (item) =>
-  !searchTerm || item.title.toLowerCase().includes(searchTerm.toLowerCase());
-
-const color = number =>
-  number % 2 === 0 ? 'red' : 'green';
 
 class App extends Component {
 
@@ -204,6 +195,19 @@ const Table = ({ list, pattern, onDismiss }) =>
       )}
   </div>
 
+Table.propTypes = {
+  list: PropTypes.arrayOf(
+    PropTypes.shape({
+      objectID: PropTypes.string.isRequired,
+      author: PropTypes.string,
+      url: PropTypes.string,
+      num_comments: PropTypes.number,
+      points: PropTypes.number,
+    })
+  ).isRequired,
+  onDismiss: PropTypes.func.isRequired
+}
+
 const Button = ({ onClick, className='', children }) =>
   <button
     onClick={onClick}
@@ -212,5 +216,9 @@ const Button = ({ onClick, className='', children }) =>
   >
     {children}
   </button>
+
+Button.defaultProps = {
+  className: '',
+};
 
 export default App;
