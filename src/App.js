@@ -140,22 +140,35 @@ class App extends Component {
   }
 }
 
-const Search = ({
-  value,
-  onChange,
-  onSubmit,
-  children
-}) =>
-  <form onSubmit={onSubmit}>
-    <input
-      type="text"
-      value={value}
-      onChange={onChange}
-    />
-    <button type="submit">
-      {children}
-    </button>
-  </form>
+class Search extends Component {
+
+  componentDidMount() {
+    this.input.focus();
+  }
+
+  render() {
+    const {
+      value,
+      onChange,
+      onSubmit,
+      children
+    } = this.props;
+    
+    return (
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          value={value}
+          onChange={onChange}
+          ref={(node) => { this.input = node; }}
+        />
+        <button type="submit">
+          {children}
+        </button>
+      </form>
+    );
+  }
+}
 
 const largeColumn = {
   width: '40%'
@@ -205,7 +218,7 @@ Table.propTypes = {
       points: PropTypes.number,
     })
   ).isRequired,
-  onDismiss: PropTypes.func.isRequired
+  onDismiss: PropTypes.func
 }
 
 const Button = ({ onClick, className='', children }) =>
@@ -222,3 +235,9 @@ Button.defaultProps = {
 };
 
 export default App;
+
+export {
+  Button,
+  Search,
+  Table
+};
